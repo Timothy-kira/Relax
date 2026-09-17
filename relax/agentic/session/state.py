@@ -21,6 +21,10 @@ MsgKind = Literal["obs", "resp"]
 # Roles accepted into the canonical Forest. Expanding this set requires the
 # compiler, OpenAI ingress, and export validator to agree on the new role.
 _ALLOWED_MESSAGE_ROLES = {"user", "assistant", "tool", "system"}
+# Content-part types the Forest stores. ``_multimodal_inputs_from_messages`` only
+# consumes ``image_url``, so admitting another type here requires the compiler and
+# the media encoder to agree on how to carry it.
+_ALLOWED_CONTENT_PART_TYPES = {"text", "image_url"}
 
 
 class RequestKind(str, Enum):
@@ -103,6 +107,49 @@ def _canonical_tool_arguments(arguments: Any, *, field: str) -> str:
     return canonical
 
 
+def _canonical_content(content: list[Any], *, message_index: int) -> str | list[dict[str, Any]]:
+    """Project one content-part list onto the shape shared by every ingress
+    protocol.
+
+    Text-only parts collapse to the joined string, matching what the Responses
+    and Anthropic ingress paths already build before they reach this function.
+    Without the collapse an equivalent Chat Completions request written with
+    parts hashes to a different Forest state and loses prefix reuse.
+    """
+
+    if not content:
+        raise ValueError(f"messages[{message_index}].content must not be empty")
+    canonical_parts: list[dict[str, Any]] = []
+    texts: list[str] = []
+    for item_index, item in enumerate(content):
+        field = f"messages[{message_index}].content[{item_index}]"
+        if not isinstance(item, dict):
+            raise TypeError(f"{field} must be a dict, got {type(item)}")
+        item_type = item.get("type")
+        if item_type == "text":
+            text = item.get("text")
+            if not isinstance(text, str):
+                raise TypeError(f"{field}.text must be a string, got {type(text)}")
+            if not text:
+                raise ValueError(f"{field}.text must not be empty")
+            texts.append(text)
+            canonical_parts.append({"type": "text", "text": text})
+        elif item_type == "image_url":
+            image_url = item.get("image_url")
+            if not isinstance(image_url, dict):
+                raise TypeError(f"{field}.image_url must be a dict, got {type(image_url)}")
+            url = image_url.get("url")
+            if not isinstance(url, str) or not url:
+                raise ValueError(f"{field}.image_url.url must be a non-empty string")
+            canonical_parts.append({"type": "image_url", "image_url": {"url": url}})
+        else:
+            allowed_types = ", ".join(sorted(_ALLOWED_CONTENT_PART_TYPES))
+            raise ValueError(f"{field}.type must be one of: {allowed_types}")
+    if len(texts) == len(canonical_parts):
+        return "".join(texts)
+    return canonical_parts
+
+
 def _normalize_tool_calls(message: dict[str, Any], *, message_index: int) -> list[dict[str, Any]]:
     tool_calls = message.get("tool_calls")
     if tool_calls is None:
@@ -116,7 +163,7 @@ def _normalize_tool_calls(message: dict[str, Any], *, message_index: int) -> lis
                 f"messages[{message_index}].tool_calls[{call_index}] must be a dict, got {type(tool_call)}"
             )
         call_id = tool_call.get("id")
-        if call_id is not None and (not isinstance(call_id, str) or not call_id):
+        if not isinstance(call_id, str) or not call_id:
             raise ValueError(f"messages[{message_index}].tool_calls[{call_index}].id must be a non-empty string")
         function = tool_call.get("function")
         if not isinstance(function, dict):
@@ -179,13 +226,7 @@ def check_messages(messages: list[dict[str, Any]] | None) -> list[dict[str, Any]
             if not content and role != "tool" and not assistant_allows_empty_content:
                 raise ValueError(f"messages[{index}].content must not be empty")
         elif isinstance(content, list):
-            if not content:
-                raise ValueError(f"messages[{index}].content must not be empty")
-            for item_index, item in enumerate(content):
-                if not isinstance(item, dict):
-                    raise TypeError(f"messages[{index}].content[{item_index}] must be a dict, got {type(item)}")
-                if item.get("type") == "text" and isinstance(item.get("text"), str) and not item["text"]:
-                    raise ValueError(f"messages[{index}].content[{item_index}].text must not be empty")
+            content = _canonical_content(content, message_index=index)
         else:
             raise TypeError(f"messages[{index}].content must be a list, string, or None, got {type(content)}")
         if role == "system":

@@ -1,0 +1,357 @@
+{
+  "arguments_canonicalization": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Go."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_1",
+            "type": "function",
+            "function": {
+              "name": "configure",
+              "arguments": "{\"alpha\":1,\"beta\":[1,2],\"gamma\":\"z\"}"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "assistant_text_and_tool_call": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Weather in Paris?"
+      },
+      {
+        "role": "assistant",
+        "content": "Let me check.",
+        "tool_calls": [
+          {
+            "id": "call_1",
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"city\":\"Paris\"}"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "image_base64": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Describe the chart."
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "data:image/png;base64,iVBORw0KGgo="
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "image_remote_url": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "What is in this picture?"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/cat.png"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "incomplete_tool_call": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Start the job."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_1",
+            "type": "function",
+            "function": {
+              "name": "start_job",
+              "arguments": "{}"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "multi_text_parts": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Part one. Part two."
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "multi_tool_calls_one_turn": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Compare Paris and Tokyo weather."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_a",
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"city\":\"Paris\"}"
+            }
+          },
+          {
+            "id": "call_b",
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"city\":\"Tokyo\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "content": "18C",
+        "tool_call_id": "call_a"
+      },
+      {
+        "role": "tool",
+        "content": "22C",
+        "tool_call_id": "call_b"
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "orphan_tool_result": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Any late results?"
+      },
+      {
+        "role": "tool",
+        "content": "late",
+        "tool_call_id": "call_x"
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "reasoning_then_tool_call": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Weather in Paris?"
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "reasoning_content": "I should call the weather tool.",
+        "tool_calls": [
+          {
+            "id": "call_1",
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"city\":\"Paris\"}"
+            }
+          }
+        ]
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "single_tool_call_roundtrip": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Weather in Paris?"
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_1",
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"city\":\"Paris\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "content": "18C",
+        "tool_call_id": "call_1"
+      },
+      {
+        "role": "user",
+        "content": "Thanks!"
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "text_only": {
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant."
+      },
+      {
+        "role": "user",
+        "content": "What is the capital of France?"
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "text_parts": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Describe this dataset."
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "thinking_disabled": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Think about it."
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {
+      "enable_thinking": false
+    }
+  },
+  "thinking_enabled": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Think about it."
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {
+      "enable_thinking": true
+    }
+  },
+  "tool_result_empty_string": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Run it."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_1",
+            "type": "function",
+            "function": {
+              "name": "run",
+              "arguments": "{}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "content": "",
+        "tool_call_id": "call_1"
+      }
+    ],
+    "tools": [],
+    "chat_template_kwargs": {}
+  },
+  "tools_with_and_without_description": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Weather?"
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          },
+          "description": "Look up weather."
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "ping",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      }
+    ],
+    "chat_template_kwargs": {}
+  }
+}

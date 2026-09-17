@@ -441,6 +441,11 @@ def _required_nonempty_string(value: Any, *, field: str, param: str) -> str:
     return value
 
 
+# Roles a Responses ``message`` Item may carry. Unknown Item types stay silently
+# skipped because the Responses API models kinds this ingress does not project,
+# but a message Item with an unknown role is a client error and is reported as one.
+_RESPONSES_MESSAGE_ROLES = frozenset({"user", "assistant", "system", "developer"})
+_ANTHROPIC_MESSAGE_ROLES = frozenset({"user", "assistant"})
 _FUNCTION_TOOL_FIELDS: dict[str, tuple[str, frozenset[Optional[str]]]] = {
     "responses": ("parameters", frozenset({"function"})),
     "anthropic": ("input_schema", frozenset({None, "custom"})),
@@ -628,7 +633,9 @@ def _responses_input_messages(request_input: Any, instructions: Any) -> list[dic
             continue
         item_type = item.get("type")
         role = item.get("role")
-        if item_type in (None, "message") and role in {"user", "assistant", "system", "developer"}:
+        if item_type in (None, "message"):
+            if role not in _RESPONSES_MESSAGE_ROLES:
+                raise AgenticChatRequestError(f"{field}.role is not supported", param="input")
             canonical_role = "system" if role == "developer" else cast(str, role)
             if canonical_role != "assistant":
                 flush_assistant()
@@ -718,8 +725,8 @@ def _anthropic_input_messages(raw_messages: Any, system: Any) -> list[dict[str, 
         if not isinstance(raw_message, dict):
             continue
         role = raw_message.get("role")
-        if role not in {"user", "assistant"}:
-            continue
+        if role not in _ANTHROPIC_MESSAGE_ROLES:
+            raise AgenticChatRequestError(f"{field}.role is not supported", param="messages")
         content = raw_message.get("content")
         if isinstance(content, str):
             messages.append({"role": role, "content": content})

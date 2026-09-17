@@ -1,0 +1,374 @@
+{
+  "arguments_canonicalization": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Go."
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "call_1",
+            "name": "configure",
+            "input": {
+              "gamma": "z",
+              "beta": [
+                1,
+                2
+              ],
+              "alpha": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "assistant_text_and_tool_call": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Weather in Paris?"
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Let me check."
+          },
+          {
+            "type": "tool_use",
+            "id": "call_1",
+            "name": "get_weather",
+            "input": {
+              "city": "Paris"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "image_base64": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Describe the chart."
+          },
+          {
+            "type": "image",
+            "source": {
+              "type": "base64",
+              "media_type": "image/png",
+              "data": "iVBORw0KGgo="
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "image_remote_url": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "What is in this picture?"
+          },
+          {
+            "type": "image",
+            "source": {
+              "type": "url",
+              "url": "https://example.com/cat.png"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "incomplete_tool_call": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Start the job."
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "call_1",
+            "name": "start_job",
+            "input": {}
+          }
+        ]
+      }
+    ]
+  },
+  "multi_text_parts": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Part one. "
+          },
+          {
+            "type": "text",
+            "text": "Part two."
+          }
+        ]
+      }
+    ]
+  },
+  "multi_tool_calls_one_turn": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Compare Paris and Tokyo weather."
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "call_a",
+            "name": "get_weather",
+            "input": {
+              "city": "Paris"
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "call_b",
+            "name": "get_weather",
+            "input": {
+              "city": "Tokyo"
+            }
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "tool_result",
+            "tool_use_id": "call_a",
+            "content": "18C"
+          },
+          {
+            "type": "tool_result",
+            "tool_use_id": "call_b",
+            "content": "22C"
+          }
+        ]
+      }
+    ]
+  },
+  "orphan_tool_result": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Any late results?"
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "tool_result",
+            "tool_use_id": "call_x",
+            "content": "late"
+          }
+        ]
+      }
+    ]
+  },
+  "reasoning_then_tool_call": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Weather in Paris?"
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "I should call the weather tool."
+          },
+          {
+            "type": "tool_use",
+            "id": "call_1",
+            "name": "get_weather",
+            "input": {
+              "city": "Paris"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "single_tool_call_roundtrip": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Weather in Paris?"
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "call_1",
+            "name": "get_weather",
+            "input": {
+              "city": "Paris"
+            }
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "tool_result",
+            "tool_use_id": "call_1",
+            "content": "18C"
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": "Thanks!"
+      }
+    ]
+  },
+  "text_only": {
+    "max_tokens": 256,
+    "system": "You are a helpful assistant.",
+    "messages": [
+      {
+        "role": "user",
+        "content": "What is the capital of France?"
+      }
+    ]
+  },
+  "text_parts": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Describe this dataset."
+          }
+        ]
+      }
+    ]
+  },
+  "thinking_disabled": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Think about it."
+      }
+    ],
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "thinking_enabled": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Think about it."
+      }
+    ],
+    "thinking": {
+      "type": "enabled",
+      "budget_tokens": 1024
+    }
+  },
+  "tool_result_empty_string": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Run it."
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "call_1",
+            "name": "run",
+            "input": {}
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "tool_result",
+            "tool_use_id": "call_1",
+            "content": ""
+          }
+        ]
+      }
+    ]
+  },
+  "tools_with_and_without_description": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Weather?"
+      }
+    ],
+    "tools": [
+      {
+        "name": "get_weather",
+        "description": "Look up weather.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      },
+      {
+        "name": "ping",
+        "input_schema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ]
+  }
+}

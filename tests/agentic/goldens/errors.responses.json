@@ -1,0 +1,213 @@
+{
+  "assistant_projects_to_nothing": {
+    "request": {
+      "input": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "refusal",
+              "refusal": "no"
+            }
+          ]
+        }
+      ]
+    },
+    "param": "input",
+    "message": "input[0].content projected to no supported content"
+  },
+  "empty_string_content": {
+    "request": {
+      "input": [
+        {
+          "role": "user",
+          "content": ""
+        }
+      ]
+    },
+    "param": "input",
+    "message": "messages[0].content must not be empty"
+  },
+  "function_call_arguments_not_a_string": {
+    "request": {
+      "input": [
+        {
+          "type": "function_call",
+          "call_id": "call_1",
+          "name": "f",
+          "arguments": {
+            "a": 1
+          }
+        }
+      ]
+    },
+    "param": "input",
+    "message": "input[0].arguments must be a JSON string"
+  },
+  "function_call_missing_call_id": {
+    "request": {
+      "input": [
+        {
+          "type": "function_call",
+          "name": "f",
+          "arguments": "{}"
+        }
+      ]
+    },
+    "param": "input",
+    "message": "input[0].call_id must be a non-empty string"
+  },
+  "function_call_missing_name": {
+    "request": {
+      "input": [
+        {
+          "type": "function_call",
+          "call_id": "call_1",
+          "arguments": "{}"
+        }
+      ]
+    },
+    "param": "input",
+    "message": "input[0].name must be a non-empty string"
+  },
+  "function_call_output_empty_text_block": {
+    "request": {
+      "input": [
+        {
+          "type": "function_call_output",
+          "call_id": "call_1",
+          "output": [
+            {
+              "type": "input_text",
+              "text": ""
+            }
+          ]
+        }
+      ]
+    },
+    "param": "input",
+    "message": "input[0].output[0].text must be non-empty"
+  },
+  "function_call_output_missing_call_id": {
+    "request": {
+      "input": [
+        {
+          "type": "function_call_output",
+          "output": "x"
+        }
+      ]
+    },
+    "param": "input",
+    "message": "input[0].call_id must be a non-empty string"
+  },
+  "input_image_not_a_string": {
+    "request": {
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_image",
+              "image_url": {
+                "url": "https://example.com/a.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "input",
+    "message": "input[0].content[0].image_url must be a non-empty string"
+  },
+  "input_missing": {
+    "request": {},
+    "param": "input",
+    "message": "input is required and must be a string or list"
+  },
+  "input_projected_to_zero": {
+    "request": {
+      "input": []
+    },
+    "param": "input",
+    "message": "input projected to zero supported messages"
+  },
+  "input_text_empty": {
+    "request": {
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": ""
+            }
+          ]
+        }
+      ]
+    },
+    "param": "input",
+    "message": "input[0].content[0] text must be non-empty"
+  },
+  "instructions_empty": {
+    "request": {
+      "input": "hi",
+      "instructions": ""
+    },
+    "param": "instructions",
+    "message": "instructions must be a non-empty string"
+  },
+  "max_output_tokens_not_positive": {
+    "request": {
+      "input": "hi",
+      "max_output_tokens": 0
+    },
+    "param": "max_output_tokens",
+    "message": "max_output_tokens must be a positive integer"
+  },
+  "tools_missing_name": {
+    "request": {
+      "input": "hi",
+      "tools": [
+        {
+          "type": "function",
+          "parameters": {}
+        }
+      ]
+    },
+    "param": "tools",
+    "message": "tools.name must be a non-empty string"
+  },
+  "tools_missing_parameters": {
+    "request": {
+      "input": "hi",
+      "tools": [
+        {
+          "type": "function",
+          "name": "f"
+        }
+      ]
+    },
+    "param": "tools",
+    "message": "tools.parameters must be a JSON object"
+  },
+  "tools_not_a_list": {
+    "request": {
+      "input": "hi",
+      "tools": {}
+    },
+    "param": "tools",
+    "message": "tools must be a list"
+  },
+  "unknown_role": {
+    "request": {
+      "input": [
+        {
+          "role": "tool",
+          "content": "x"
+        }
+      ]
+    },
+    "param": "input",
+    "message": "input[0].role is not supported"
+  }
+}

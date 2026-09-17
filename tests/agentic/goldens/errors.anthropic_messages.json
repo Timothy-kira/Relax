@@ -1,0 +1,374 @@
+{
+  "assistant_text_block_empty": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": ""
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].text must be non-empty"
+  },
+  "content_projects_to_nothing": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "document",
+              "source": {}
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content projected to no supported content"
+  },
+  "empty_string_content": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": ""
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content must not be empty"
+  },
+  "image_base64_data_empty": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image",
+              "source": {
+                "type": "base64",
+                "media_type": "image/png",
+                "data": ""
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].source.data must be non-empty"
+  },
+  "image_media_type_not_an_image": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image",
+              "source": {
+                "type": "base64",
+                "media_type": "application/pdf",
+                "data": "AAA"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].source.media_type must be an image type"
+  },
+  "image_source_not_an_object": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image",
+              "source": "x"
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].source must be a JSON object"
+  },
+  "image_source_type_unsupported": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image",
+              "source": {
+                "type": "file",
+                "file_id": "f"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].source.type is not supported"
+  },
+  "image_url_empty": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image",
+              "source": {
+                "type": "url",
+                "url": ""
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].source.url must be non-empty"
+  },
+  "max_tokens_missing": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ]
+    },
+    "param": "max_tokens",
+    "message": "max_tokens is required"
+  },
+  "max_tokens_not_positive": {
+    "request": {
+      "max_tokens": 0,
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ]
+    },
+    "param": "max_tokens",
+    "message": "max_tokens must be a positive integer"
+  },
+  "messages_not_a_list": {
+    "request": {
+      "max_tokens": 16,
+      "messages": {}
+    },
+    "param": "messages",
+    "message": "messages is required and must be a list"
+  },
+  "messages_projected_to_zero": {
+    "request": {
+      "max_tokens": 16,
+      "messages": []
+    },
+    "param": "messages",
+    "message": "messages projected to zero supported messages"
+  },
+  "stop_sequences_not_strings": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ],
+      "stop_sequences": [
+        1
+      ]
+    },
+    "param": "stop_sequences",
+    "message": "stop_sequences must be a list of strings"
+  },
+  "system_text_block_empty": {
+    "request": {
+      "max_tokens": 16,
+      "system": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ]
+    },
+    "param": "system",
+    "message": "system[0].text must be non-empty"
+  },
+  "text_block_empty": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": ""
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].text must be non-empty"
+  },
+  "thinking_block_not_a_string": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": 1
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].thinking must be a string"
+  },
+  "tool_result_missing_tool_use_id": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "content": "x"
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].tool_use_id must be a non-empty string"
+  },
+  "tool_use_input_not_an_object": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "call_1",
+              "name": "f",
+              "input": "x"
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].input must be a JSON object"
+  },
+  "tool_use_missing_id": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "name": "f",
+              "input": {}
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].id must be a non-empty string"
+  },
+  "tool_use_missing_name": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "call_1",
+              "input": {}
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].name must be a non-empty string"
+  },
+  "tools_missing_input_schema": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ],
+      "tools": [
+        {
+          "name": "f"
+        }
+      ]
+    },
+    "param": "tools",
+    "message": "tools.input_schema must be a JSON object"
+  },
+  "unknown_role": {
+    "request": {
+      "max_tokens": 16,
+      "messages": [
+        {
+          "role": "system",
+          "content": "x"
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].role is not supported"
+  }
+}

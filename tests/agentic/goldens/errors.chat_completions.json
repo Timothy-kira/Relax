@@ -1,0 +1,395 @@
+{
+  "empty_list_content": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": []
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content must not be empty"
+  },
+  "empty_string_content": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": ""
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content must not be empty"
+  },
+  "empty_text_part": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": ""
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].text must not be empty"
+  },
+  "empty_tool_call_id": {
+    "request": {
+      "messages": [
+        {
+          "role": "tool",
+          "tool_call_id": "",
+          "content": "x"
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].tool_call_id must be a non-empty string"
+  },
+  "image_url_empty_url": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": ""
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].image_url.url must be a non-empty string"
+  },
+  "image_url_missing_url": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {}
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].image_url.url must be a non-empty string"
+  },
+  "image_url_not_a_dict": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": "https://example.com/cat.png"
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].image_url must be a dict, got <class 'str'>"
+  },
+  "logprobs_not_a_boolean": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ],
+      "logprobs": 1
+    },
+    "param": "logprobs",
+    "message": "logprobs must be a boolean"
+  },
+  "max_tokens_not_positive": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ],
+      "max_tokens": 0
+    },
+    "param": "max_tokens",
+    "message": "max_tokens must be a positive integer"
+  },
+  "messages_missing_content": {
+    "request": {
+      "messages": [
+        {
+          "role": "user"
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0] must include content"
+  },
+  "messages_not_a_list": {
+    "request": {
+      "messages": {}
+    },
+    "param": "messages",
+    "message": "messages must be a list, got <class 'dict'>"
+  },
+  "messages_projected_to_zero": {
+    "request": {
+      "messages": []
+    },
+    "param": "messages",
+    "message": "messages projected to zero supported messages"
+  },
+  "reserved_chat_template_kwargs": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ],
+      "chat_template_kwargs": {
+        "tokenize": true,
+        "tools": []
+      }
+    },
+    "param": "chat_template_kwargs",
+    "message": "chat_template_kwargs cannot set reserved keys: tokenize, tools"
+  },
+  "stop_not_strings": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ],
+      "stop": [
+        1
+      ]
+    },
+    "param": "stop",
+    "message": "stop must be a string or list of strings"
+  },
+  "tool_call_arguments_duplicate_keys": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        },
+        {
+          "role": "assistant",
+          "content": "ok",
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": {
+                "name": "f",
+                "arguments": "{\"a\": 1, \"a\": 2}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[1].tool_calls[0].function.arguments contains duplicate key: a"
+  },
+  "tool_call_arguments_invalid_json": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        },
+        {
+          "role": "assistant",
+          "content": "ok",
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": {
+                "name": "f",
+                "arguments": "{not json"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[1].tool_calls[0].function.arguments must be valid JSON"
+  },
+  "tool_call_arguments_non_finite": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        },
+        {
+          "role": "assistant",
+          "content": "ok",
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": {
+                "name": "f",
+                "arguments": "{\"a\": NaN}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[1].tool_calls[0].function.arguments contains non-finite number: NaN"
+  },
+  "tool_call_empty_id": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        },
+        {
+          "role": "assistant",
+          "content": "ok",
+          "tool_calls": [
+            {
+              "id": "",
+              "type": "function",
+              "function": {
+                "name": "f",
+                "arguments": "{}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[1].tool_calls[0].id must be a non-empty string"
+  },
+  "tool_call_function_not_a_dict": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        },
+        {
+          "role": "assistant",
+          "content": "ok",
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": "f"
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[1].tool_calls[0].function must be a dict, got <class 'str'>"
+  },
+  "tool_call_missing_id": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "a"
+        },
+        {
+          "role": "assistant",
+          "content": "b"
+        },
+        {
+          "role": "assistant",
+          "content": "c",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "f",
+                "arguments": "{}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[2].tool_calls[0].id must be a non-empty string"
+  },
+  "tool_calls_not_a_list": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        },
+        {
+          "role": "assistant",
+          "content": "ok",
+          "tool_calls": {}
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[1].tool_calls must be a list, got <class 'dict'>"
+  },
+  "unknown_role": {
+    "request": {
+      "messages": [
+        {
+          "role": "developer",
+          "content": "hi"
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].role must be one of: assistant, system, tool, user"
+  },
+  "unsupported_content_part_type": {
+    "request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_audio",
+              "input_audio": {
+                "data": "AA"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "param": "messages",
+    "message": "messages[0].content[0].type must be one of: image_url, text"
+  }
+}

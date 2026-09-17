@@ -276,6 +276,24 @@ Messages tool 使用 `name`、`input_schema` 和可选 `description`；省略 to
 会投影为 canonical function tool。Anthropic response 使用 text、thinking 和 tool-use block，并提供 Anthropic stop reason。
 `stop_sequences` 会作为当前 turn 的 stop string 传给 generation。
 
+#### Canonical 表示
+
+三种协议最终收敛到同一份 canonical `messages`、`tools` 与 `chat_template_kwargs`，该三元组会被 hash 成 Session 的
+prefix-match key。因此语义等价的 request 无论从哪个 endpoint 进入，规范化结果都完全一致：
+
+| 规则 | Canonical 结果 |
+| --- | --- |
+| 全部为 text 的 content part | 塌缩为拼接后的字符串 |
+| text 与 image 混排的 content part | 由 canonical `text` 与 `image_url` block 组成的 part 列表 |
+| Image content | 恰好为 `{"type": "image_url", "image_url": {"url": "..."}}`；`detail` 等额外 key 会被丢弃 |
+| 其他 content part type | 拒绝，并给出该 part 的完整 field path |
+| Assistant `tool_calls[].id` | 三种协议下均为必填且不能为空 |
+| 超出各协议支持集合的 role | 拒绝，并给出该 message 的完整 field path |
+
+被拒绝的 request 会报告出错值的完整 field path，例如
+`messages[2].tool_calls[0].id must be a non-empty string`。未知的 Responses Item type 仍然静默跳过，因为
+Responses API 建模了一些本 ingress 不做投影的 Item 类型。
+
 #### Buffered SSE
 
 Buffered SSE 会在完整 generation 执行期间保持 HTTP request 打开。Relax 先发送 connection frame；generation

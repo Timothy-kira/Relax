@@ -287,6 +287,25 @@ Messages tools use `name`, `input_schema`, and optional `description`; a missing
 projected as canonical function tools. Anthropic responses use text, thinking, and tool-use blocks with Anthropic stop
 reasons. `stop_sequences` is passed to generation as the turn's stop strings.
 
+#### Canonical representation
+
+All three protocols converge on one canonical `messages`, `tools`, and `chat_template_kwargs` triple, and that triple is
+hashed into the Session prefix-match key. Semantically equivalent requests therefore normalize identically whichever
+endpoint they arrive on:
+
+| Rule | Canonical result |
+| --- | --- |
+| Content parts that are all text | Collapsed to the concatenated string |
+| Content parts mixing text and images | A parts list of canonical `text` and `image_url` blocks |
+| Image content | Exactly `{"type": "image_url", "image_url": {"url": "..."}}`; extra keys such as `detail` are dropped |
+| Other content part types | Rejected with the part's full field path |
+| Assistant `tool_calls[].id` | Required and nonempty on every protocol |
+| Roles outside each protocol's supported set | Rejected with the message's full field path |
+
+Rejected requests report the full field path of the offending value, for example
+`messages[2].tool_calls[0].id must be a non-empty string`. Unknown Responses Item types stay silently skipped, because
+the Responses API models Item kinds this ingress does not project.
+
 #### Buffered SSE
 
 Buffered SSE keeps the HTTP request open while the complete generation runs. Relax sends an initial connection frame
